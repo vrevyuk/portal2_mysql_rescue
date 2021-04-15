@@ -94,7 +94,7 @@ async function main() {
   await execDumpAndPatchIt(mysqlDump, readRoutinesDump, path.join(workDir, `routines.sql`))
   writeScript.push(`${mysqlClient} ${awsConnection} < routines.sql`)
 
-  const rows = await mysql('SHOW TABLES where Tables_in_vivat_portal like ?', ['%url%'])
+  const rows = await mysql('SHOW TABLES where Tables_in_vivat_portal')
   for(const row of rows) {
     const tableName = row['Tables_in_vivat_portal']
     const tableDump = `--flush-logs ${connection} ${tableName}`
