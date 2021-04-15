@@ -29,7 +29,6 @@ function wait2mysql() {
 
 async function execDumpAndPatchIt(command, args, outputFile) {
   return new Promise(function(resolve, reject) {
-    // console.log(command + ' ' + args)
     const writeStream = fs.createWriteStream(outputFile, 'utf8')
     const child = spawn(command, args.split(' '))
     
@@ -91,7 +90,7 @@ async function main() {
   readScript += `echo "routines"\n`
   readScript += `${readRoutinesDump}\n`
 
-  // await execDumpAndPatchIt(mysqlDump, readRoutinesDump, path.join(workDir, `routines.sql`))
+  await execDumpAndPatchIt(mysqlDump, readRoutinesDump, path.join(workDir, `routines.sql`))
   writeScript.push(`${mysqlClient} ${awsConnection} < routines.sql`)
 
   const rows = await mysql('SHOW TABLES where Tables_in_vivat_portal like ?', ['%url%'])
