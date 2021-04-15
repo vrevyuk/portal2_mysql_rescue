@@ -27,7 +27,7 @@ function wait2mysql() {
   })
 }
 
-async function execDumpAndPatchIt(command, args, outputFile) {
+function execDumpAndPatchIt(command, args, outputFile) {
   return new Promise(function(resolve, reject) {
     const writeStream = fs.createWriteStream(outputFile, 'utf8')
     const child = spawn(command, args.split(' '))
@@ -55,7 +55,7 @@ async function execDumpAndPatchIt(command, args, outputFile) {
   })
 }
 
-async function prepareDir() {
+function prepareDir() {
   return new Promise(function(resolve, reject) {
     console.log(`workDir: ${workDir}`)
     rimraf(workDir, function(error) {
