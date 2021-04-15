@@ -83,9 +83,7 @@ async function main() {
   readScript += 'mkdir dump\n'
 
   const awsConnection = `-h ${process.env.to_mysql_host} -u ${process.env.to_mysql_user} -p${process.env.to_mysql_password} ${process.env.to_mysql_db}`
-  const writeRoutines = `${mysqlClient} ${awsConnection} < ${workDir}/routines.sql\n`
   let writeScript = [`#!/bin/bash`, 'echo "Writing portal2 database."']
-  writeScript.push(writeRoutines)
 
   await wait2mysql()
   readScript += `echo "routines"\n`
