@@ -51,6 +51,7 @@ function execDumpAndPatchIt(command, args, outputFile) {
         .replace('DEFINER=`billing`@`%`', newDefiner)
         .replace('DEFINER=`dmichael`@`178.150.125.23`', newDefiner)
         .replace('DEFINER=`root`@`%`', newDefiner)
+        .replace('ROW_FORMAT=FIXED', '')
       writeStream.write(`${str}\r\n`)
     })
   })
@@ -92,14 +93,14 @@ async function main() {
   await execDumpAndPatchIt(mysqlDump, readRoutinesDump, path.join(workDir, `routines.sql`))
   writeScript.push(`${mysqlClient} ${awsConnection} < routines.sql`)
 
-  const rows = await mysql('SHOW TABLES where Tables_in_vivat_portal like ?', ['%%'])
-  for(const row of rows) {
-    const tableName = row['Tables_in_vivat_portal']
-    const tableDump = `--flush-logs ${connection} ${tableName}`
-    console.log(`Reading info for ${tableName}`)
-    await execDumpAndPatchIt(mysqlDump, tableDump, path.join(workDir, `${tableName}.sql`))
-    writeScript.push(`${mysqlClient} ${awsConnection} < ${tableName}.sql`)
-  }
+  // const rows = await mysql('SHOW TABLES where Tables_in_vivat_portal like ?', ['%%'])
+  // for(const row of rows) {
+  //   const tableName = row['Tables_in_vivat_portal']
+  //   const tableDump = `--flush-logs ${connection} ${tableName}`
+  //   console.log(`Reading info for ${tableName}`)
+  //   await execDumpAndPatchIt(mysqlDump, tableDump, path.join(workDir, `${tableName}.sql`))
+  //   writeScript.push(`${mysqlClient} ${awsConnection} < ${tableName}.sql`)
+  // }
 
   fs.writeFileSync(path.join(workDir, `write2aws.sh`), writeScript.join('\n'))
   fs.chmodSync(path.join(workDir, `write2aws.sh`), 0o100)
