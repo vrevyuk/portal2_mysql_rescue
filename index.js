@@ -101,7 +101,8 @@ async function main() {
     writeScript.push(`${mysqlClient} ${awsConnection} < ${tableName}.sql`)
   }
 
-  fs.writeFileSync(path.join(workDir, `write2aws.sql`), writeScript.join('\n'))
+  fs.writeFileSync(path.join(workDir, `write2aws.sh`), writeScript.join('\n'))
+  fs.chmodSync(path.join(workDir, `write2aws.sh`), 0o100)
   mysql.closeAll()
   console.log('Stop')
 }
