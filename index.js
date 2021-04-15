@@ -28,6 +28,7 @@ function wait2mysql() {
 }
 
 function execDumpAndPatchIt(command, args, outputFile) {
+  console.log(command, args)
   return new Promise(function(resolve, reject) {
     const writeStream = fs.createWriteStream(outputFile, 'utf8')
     const child = spawn(command, args.split(' '))
